@@ -1,0 +1,26 @@
+# Unity generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Tt]arget/
+.obj/
+
+# Builds
+Build/
+Builds/
+
+# User-specific files
+[Dd]ebug/
+[Dd]ebugPub/
+.idea/
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# User-specific files for Unity
+*.user
+*.userprefs
+
+# Unity logs
+Logs/
