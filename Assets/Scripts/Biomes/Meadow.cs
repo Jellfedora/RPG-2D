@@ -1,174 +1,139 @@
 using System.Collections.Generic;
 using UnityEngine;
 using WorldGeneration;
-using System.Linq;
-public class MeadowBiome : Biome
-{
-    public MeadowBiome()
-    {
-        Name = "Meadow";
 
+public class MeadowBiome : Biome {
+    public MeadowBiome(System.Random seedRandom) : base(seedRandom) {
+        Name = "Meadow";
         Debug.Log("Création du biome : " + Name);
 
-        // Chargement des préfabriqués depuis les bons dossiers Resources
         objectPrefabs = new List<GameObject>();
 
-        // Chargement des arbres
-        for (int i = 1; i <= 3; i++)
-        {
+        for (int i = 1; i <= 3; i++) {
             GameObject tree = Resources.Load<GameObject>($"Prefabs/Trees/Tree{i}");
             if (tree != null) objectPrefabs.Add(tree);
         }
 
-        // Chargement des rochers
-        for (int i = 1; i <= 3; i++)
-        {
+        for (int i = 1; i <= 3; i++) {
             GameObject rock = Resources.Load<GameObject>($"Prefabs/Rocks/Rock{i}");
             if (rock != null) objectPrefabs.Add(rock);
         }
 
-        minObjectsPerChunk = 30;
-        maxObjectsPerChunk = 50;
+        for (int i = 1; i <= 1; i++) {
+            GameObject branching = Resources.Load<GameObject>($"Prefabs/Branching/Branching{i}");
+            if (branching != null) objectPrefabs.Add(branching);
+        }
+
+        minObjectsPerChunk = 8;
+        maxObjectsPerChunk = 25;
 
         Debug.Log($"Nombre de prefabs chargés pour la Prairie : {objectPrefabs.Count}");
     }
 
-    // Définir les règles pour la génération des objets dans les prairies
-    public override void GenerateObjects(Chunk chunk, int startX, int startY, int endX, int endY, List<Vector2Int> occupiedPositions)
-    {
-        int total = Random.Range(minObjectsPerChunk, maxObjectsPerChunk);
+    private Vector3 IsoPosition(int x, int y) {
+        float isoX = (x - y) * 0.5f;
+        float isoY = (x + y) * 0.25f;
+        return new Vector3(isoX, isoY, 0f);
+    }
 
-        for (int i = 0; i < total; i++)
-        {
-            int x = Random.Range(startX, endX);
-            int y = Random.Range(startY, endY);
+    public override void GenerateObjects(Chunk chunk, int startX, int startY, int endX, int endY, List<Vector2Int> occupiedPositions) {
+        // Utilisation de random pour générer le nombre d'objets
+        int total = random.Next(minObjectsPerChunk, maxObjectsPerChunk);
+
+        for (int i = 0; i < total; i++) {
+            // Utilisation de random pour les positions x et y
+            int x = random.Next(startX, endX);
+            int y = random.Next(startY, endY);
             Vector2Int pos = new Vector2Int(x, y);
 
             if (IsTooCloseToOtherObjects(pos, occupiedPositions, 1f)) continue;
 
-            Vector3 worldPos = new Vector3(x + 0.5f, y + 0.5f, 0f);
+            Vector3 worldPos = IsoPosition(x, y);
             GameObject prefab = GetRandomPrefab(objectPrefabs);
-
             if (prefab == null) continue;
 
-            GameObject instance = Object.Instantiate(prefab, worldPos, Quaternion.identity, chunk.chunkTransform);
-            Debug.Log($"Objet instancié : {prefab.name} à {worldPos}");
-            MaybeFlipX(instance); // ➤ Ajout de l'inversion horizontale aléatoire si tu veux
+            // Récupérer le PrefabInfo associé au prefab
+            PrefabInfo prefabInfo = prefab.GetComponent<PrefabInfo>();
 
-            // Optionnel : changer le sortingOrder pour que les objets s'empilent correctement
+            // Assigner la position locale dans le chunk
+            GameObject instance = Object.Instantiate(prefab, worldPos, Quaternion.identity, chunk.chunkTransform);
+            TileData data = new TileData(pos, TileType.Ground) {
+                prefabName = prefabInfo.prefabName,
+                gameIdentifier = prefabInfo.gameIdentifier,
+                isDestroyed = false,
+                currentHealth = prefabInfo.isDestructible ? prefabInfo.baseHealth : 100 // Si destructible, on met la santé de base
+            };
+            chunk.tiles[pos] = data;
+
+            // Permutation aléatoire de l'axe X
+            MaybeFlipX(instance);
+
             SpriteRenderer sr = instance.GetComponent<SpriteRenderer>();
             if (sr != null)
-                sr.sortingOrder = -y;
+                sr.sortingOrder = -(x + y);
 
             occupiedPositions.Add(pos);
         }
     }
 
-    // Inversion horizontale aléatoire
-    private void MaybeFlipX(GameObject obj)
-    {
-        if (Random.value < 0.5f)
-        {
+    private void MaybeFlipX(GameObject obj) {
+        // Utilisation de random pour déterminer si on flippe l'objet
+        if (random.NextDouble() < 0.5) {
             Vector3 scale = obj.transform.localScale;
             scale.x *= -1f;
             obj.transform.localScale = scale;
         }
     }
 
-    // Vérifier si une position est trop proche d'autres objets
-    private bool IsTooCloseToOtherObjects(Vector2Int pos, List<Vector2Int> occupiedPositions, float minDistance)
-    {
-        foreach (var occupiedPos in occupiedPositions)
-        {
+    private bool IsTooCloseToOtherObjects(Vector2Int pos, List<Vector2Int> occupiedPositions, float minDistance) {
+        foreach (var occupiedPos in occupiedPositions) {
             if (Vector2Int.Distance(pos, occupiedPos) < minDistance)
                 return true;
         }
         return false;
     }
 
-    // Récupérer un préfab aléatoire
-    private GameObject GetRandomPrefab(List<GameObject> prefabs)
-    {
+    private GameObject GetRandomPrefab(List<GameObject> prefabs) {
         if (prefabs == null || prefabs.Count == 0) return null;
-        return prefabs[Random.Range(0, prefabs.Count)];
+        return prefabs[random.Next(prefabs.Count)];
     }
 
-    public override TileType GetTileTypeAt(Vector2Int worldPos)
-    {
-        // Exemple simple : tout est de l'herbe avec quelques tuiles d'eau aléatoires
-        //float noise = Mathf.PerlinNoise(worldPos.x * 0.1f, worldPos.y * 0.1f);
-
-        //if (noise > 0.7f)
-            //return TileType.Water;
-        //else
-        return TileType.Grass;
+    public override TileType GetTileTypeAt(Vector2Int worldPos) {
+        return TileType.Ground;
     }
 
-    // Générer les visuels des tuiles d'herbe parmis plusieurs prefabs
-    public override void GenerateTileVisuals(Chunk chunk)
-    {
-        // Charger les 5 prefabs d'herbe
-        GameObject[] grassPrefabs = new GameObject[5];
-        for (int i = 1; i <= 5; i++)
-        {
-            grassPrefabs[i - 1] = Resources.Load<GameObject>($"Prefabs/Grass/Grass{i}");
+    // Placement du sol
+    public override void GenerateTileVisuals(Chunk chunk) {
+        // Charger tous les types de sol
+        GameObject[] groundPrefabs = new GameObject[3];
+        for (int i = 0; i < 3; i++) {
+            groundPrefabs[i] = Resources.Load<GameObject>($"Prefabs/Ground/Ground{i + 1}");
+            if (groundPrefabs[i] == null) {
+                Debug.LogWarning($"Le prefab Ground{i + 1} est manquant !");
+                return;
+            }
         }
 
-        // Vérifier que les 5 prefabs ont bien été chargés
-        if (grassPrefabs.Any(g => g == null))
-        {
-            Debug.LogWarning("Certains prefabs d'herbe sont manquants !");
-            return;
-        }
-
-        foreach (var pair in chunk.tiles)
-        {
+        foreach (var pair in chunk.tiles) {
             Vector2Int localPos = pair.Key;
             TileData tile = pair.Value;
 
-            if (tile.type == TileType.Grass)
-            {
+            if (tile.type == TileType.Ground) {
                 Vector2Int worldPos = new(
                     chunk.chunkPosition.x * chunk.size + localPos.x,
                     chunk.chunkPosition.y * chunk.size + localPos.y
                 );
 
-                // Choisir un prefab d'herbe avec des probabilités
-                GameObject grassPrefab = GetRandomGrassPrefab(grassPrefabs);
+                Vector3 isoPos = IsoPosition(worldPos.x, worldPos.y);
+                isoPos.y -= 0.75f; // Ajustement Y pour alignement des bases
 
-                // Positionner l'herbe
-                Vector3 position = new(worldPos.x + 0.5f, worldPos.y + 0.5f, 1f);
-                GameObject instance = Object.Instantiate(grassPrefab, position, Quaternion.identity, chunk.chunkTransform);
+                GameObject selectedPrefab = groundPrefabs[random.Next(groundPrefabs.Length)];
+                GameObject instance = Object.Instantiate(selectedPrefab, isoPos, Quaternion.identity, chunk.chunkTransform);
 
-                // Gérer le tri des objets en fonction de leur position pour les superpositions
                 SpriteRenderer sr = instance.GetComponent<SpriteRenderer>();
                 if (sr != null)
-                    sr.sortingOrder = -worldPos.y;
+                    sr.sortingOrder = -(worldPos.x + worldPos.y);
             }
         }
-    }
-
-    // Fonction pour choisir un prefab d'herbe en fonction des probabilités
-    private GameObject GetRandomGrassPrefab(GameObject[] grassPrefabs)
-    {
-        // Poids pour chaque prefab (0 = jamais choisi, 1 = fréquence normale, >1 = plus fréquent)
-        float[] weights = new float[] { 1f, 1f, 1f, 0.1f, 0.1f }; // grass4 et grass5 ont moins de poids
-
-        // Calculer un index basé sur les poids
-        float totalWeight = weights.Sum();
-        float randomValue = Random.value * totalWeight;
-
-        float cumulativeWeight = 0f;
-        for (int i = 0; i < grassPrefabs.Length; i++)
-        {
-            cumulativeWeight += weights[i];
-            if (randomValue <= cumulativeWeight)
-            {
-                return grassPrefabs[i];
-            }
-        }
-
-        // Retourner un prefab par défaut (en cas d'erreur)
-        return grassPrefabs[0];
     }
 }

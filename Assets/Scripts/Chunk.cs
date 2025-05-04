@@ -11,33 +11,48 @@ public class Chunk
     public Dictionary<Vector2Int, TileData> tiles = new();
     public BiomeType biomeType { get; private set; }
     public Biome biome { get; private set; }
+    private System.Random random;  // Générateur aléatoire pour ce chunk
 
-    public Chunk(Vector2Int pos, int chunkSize, Transform parent)
-    {
-        chunkPosition = pos;
-        size = chunkSize;
+    // Constructeur modifié pour accepter un générateur aléatoire
+    public Chunk(Vector2Int pos, int chunkSize, Transform parent, System.Random seedRandom) {
+        chunkPosition = pos; // Position du chunk dans le monde
+        size = chunkSize; // Taille du chunk
+        random = seedRandom;  // Utilisation du générateur de seed
 
-        GameObject chunkGO = new($"Chunk_{pos.x}_{pos.y}");
+        GameObject chunkGO = new($"Chunk_{pos.x}_{pos.y}"); // Création du GameObject pour le chunk
         chunkGO.transform.parent = parent;
         chunkTransform = chunkGO.transform;
 
-        AssignBiome();       // On assigne le biome au chunk
-        GenerateTiles();     // On génère les tuiles
+        AssignBiome(); // On assigne le biome au chunk
+        GenerateTiles(); // On génère les tuiles
         biome.GenerateTileVisuals(this); // On génère les visuels des tuiles
-        GenerateObjects();   // On génère les objets
+        GenerateObjects(); // On génère les objets
     }
 
-    // ➤ Méthode pour assigner un biome au chunk
-    public void AssignBiome()
-    {
-        float noiseValue = Mathf.PerlinNoise(chunkPosition.x * 0.1f, chunkPosition.y * 0.1f);
+    // Assigner un biome au chunk
+    public void AssignBiome() {
+        // Utilisation de random pour calculer un bruit
+        float noiseValue = Mathf.PerlinNoise(chunkPosition.x * 0.1f + random.Next(), chunkPosition.y * 0.1f + random.Next());
 
-        // ➤ Étend ici pour intégrer d'autres types de biomes
+        // Déterminer le biome en fonction de la valeur du bruit
+        //if (noiseValue < 0.3f)
+        //{
+            //biomeType = BiomeType.Desert;
+            //biome = new DesertBiome();
+        //}
+        //else if (noiseValue < 0.6f)
+        //{
+            //biomeType = BiomeType.Forest;
+            //biome = new ForestBiome();
+        //}
+        //else
+        //{
         biomeType = BiomeType.Meadow;
-        biome = new MeadowBiome();
+        biome = new MeadowBiome(random); // Passer la seedRandom au biome
+        //}
     }
 
-    // ➤ Méthode pour obtenir le type de tuile à une position donnée
+    // Obtenir le type de tuile à une position donnée
     public Vector2Int WorldToLocalPosition(Vector2Int worldPos)
     {
         return new Vector2Int(
@@ -46,7 +61,7 @@ public class Chunk
         );
     }
 
-    // ➤ Génère les tuiles du chunk selon le biome
+    // Génère les tuiles du chunk selon le biome
     private void GenerateTiles()
     {
         for (int x = 0; x < size; x++)

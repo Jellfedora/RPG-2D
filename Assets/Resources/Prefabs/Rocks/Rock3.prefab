@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8978114685520250144}
   - component: {fileID: 4922773955396944280}
+  - component: {fileID: 6857594163017647510}
   m_Layer: 0
   m_Name: Rock3
   m_TagString: meadows_rock
@@ -87,3 +88,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6857594163017647510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5373116049898207964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd0a09f5038620541993c81d26ce30e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameIdentifier: Rock3
+  prefabName: Rock3
+  isDestructible: 1
+  baseHealth: 100
