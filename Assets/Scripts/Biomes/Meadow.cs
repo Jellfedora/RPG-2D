@@ -4,9 +4,6 @@ using WorldGeneration;
 
 public class MeadowBiome : Biome {
     public MeadowBiome(System.Random seedRandom) : base(seedRandom) {
-        Name = "Meadow";
-        Debug.Log("Création du biome : " + Name);
-
         objectPrefabs = new List<GameObject>();
 
         for (int i = 1; i <= 3; i++) {
@@ -26,8 +23,6 @@ public class MeadowBiome : Biome {
 
         minObjectsPerChunk = 8;
         maxObjectsPerChunk = 25;
-
-        Debug.Log($"Nombre de prefabs chargés pour la Prairie : {objectPrefabs.Count}");
     }
 
     private Vector3 IsoPosition(int x, int y) {

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public class GridManager : MonoBehaviour
 {
     [Header("Taille du monde")]
-    [SerializeField] private int worldSize = 500;
     [SerializeField] private int chunkSize = 25;
 
     [Header("Références")]
@@ -13,7 +12,7 @@ public class GridManager : MonoBehaviour
     private System.Random seedRandom;
 
     // Générer le monde avec un nom et une seed
-    public void GenerateWorld(string worldName, string worldSeed)
+    public void GenerateWorld(string worldName, int worldSize, string worldSeed)
     {
         // Initialiser le générateur aléatoire avec la seed
         seedRandom = new System.Random(worldSeed.GetHashCode()); // Utilisation du hashCode de la seed pour générer un int
@@ -41,8 +40,6 @@ public class GridManager : MonoBehaviour
         Chunk chunk = new(chunkPos, chunkSize, worldParent, seedRandom);
         chunk.AssignBiome();
         chunks[chunkPos] = chunk;
-
-        Debug.Log($"Chunk {chunkPos} : {chunk.biomeType}");
     }
 
     // Méthode pour obtenir un chunk à une position donnée

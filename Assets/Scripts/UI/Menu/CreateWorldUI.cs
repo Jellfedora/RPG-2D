@@ -7,6 +7,7 @@ public class CreateWorldUI : MonoBehaviour
 {
     public TMP_InputField worldNameInput;   // Champ pour le nom de la carte
     public TMP_InputField worldSeedInput;   // Champ pour la seed de la carte
+    public Slider worldSizeSlider; // Dropdown pour la taille de la carte
     public Button generateButton;       // Bouton pour générer la carte
     public Button backButton;           // Bouton pour revenir à la page d'accueil
 
@@ -41,13 +42,21 @@ public class CreateWorldUI : MonoBehaviour
             return;
         }
 
+        // Vérifier si la taille de la carte est valide
+        int worldSize = (int)worldSizeSlider.value;
+        if (worldSize <= 0)
+        {
+            Debug.LogWarning("La taille de la carte doit être supérieure à 0.");
+            return;
+        }
+
         // Lancer la génération via GridManager
         GridManager gridManager = FindFirstObjectByType<GridManager>();
-        gridManager.GenerateWorld(worldName, worldSeed);
+        gridManager.GenerateWorld(worldName, worldSize, worldSeed);
 
         // TODO Sauvegarder le monde
 
-        Debug.Log($"[CreateWorldUI] Génération du monde {worldName} avec la seed {worldSeed}");
+        Debug.Log($"[CreateWorldUI] Génération du monde {worldName} de taille {worldSize} avec la seed {worldSeed}");
 
         // Afficher l'UI de jeu
         UIManager.Instance.ShowGameUI();
