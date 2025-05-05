@@ -54,7 +54,8 @@ public class CreateWorldUI : MonoBehaviour
         GridManager gridManager = FindFirstObjectByType<GridManager>();
         gridManager.GenerateWorld(worldName, worldSize, worldSeed);
 
-        // TODO Sauvegarder le monde
+        // Sauvegarder le monde
+        SaveWorld(worldName, worldSize);
 
         Debug.Log($"[CreateWorldUI] Génération du monde {worldName} de taille {worldSize} avec la seed {worldSeed}");
 
@@ -62,14 +63,45 @@ public class CreateWorldUI : MonoBehaviour
         UIManager.Instance.ShowGameUI();
     }
 
-    void SaveWorld(string worldName, int size)
-    {
-        string filePath = System.IO.Path.Combine(Application.persistentDataPath, $"{worldName}.txt");
-        string worldData = $"Nom: {worldName}, Taille: {size}";
+    void SaveWorld(string worldName, int size) {
+        WorldData worldData = new WorldData
+        {
+            worldName = worldName,
+            worldSeed = worldSeedInput.text, // Utilisation de la seed entrée par l'utilisateur
+            worldSize = size
+        };
 
-        System.IO.File.WriteAllText(filePath, worldData);
+        // Ajouter les chunks et leurs données
+        GridManager gridManager = FindFirstObjectByType<GridManager>();
+        int chunkCount = Mathf.CeilToInt((float)size / gridManager.chunkSize);
+        for (int cx = 0; cx < chunkCount; cx++)
+        {
+            for (int cy = 0; cy < chunkCount; cy++)
+            {
+                Vector2Int chunkPos = new Vector2Int(cx, cy);
+                Chunk chunk = gridManager.GetChunkAtPosition(chunkPos);
+                if (chunk != null)
+                {
+                    WorldData.ChunkData chunkData = new WorldData.ChunkData
+                    {
+                        chunkPosition = chunk.chunkPosition
+                    };
+
+                    // Ajouter les données des tuiles
+                    foreach (var tile in chunk.tiles)
+                    {
+                        chunkData.tiles.Add(tile.Value); // Ajout de chaque TileData
+                    }
+
+                    worldData.chunks.Add(chunkData);
+                }
+            }
+        }
+
+        // Sérialiser en JSON et sauvegarder
+        string json = JsonUtility.ToJson(worldData, true);
+        string filePath = System.IO.Path.Combine(Application.persistentDataPath, $"{worldName}.json");
+        System.IO.File.WriteAllText(filePath, json);
         Debug.Log($"Carte sauvegardée sous {filePath}");
     }
-
-    
 }

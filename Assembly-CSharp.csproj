@@ -55,6 +55,7 @@
     <Compile Include="Assets\Scripts\Biome.cs" />
     <Compile Include="Assets\Scripts\TileType.cs" />
     <Compile Include="Assets\Scripts\Chunk.cs" />
+    <Compile Include="Assets\Scripts\WorldData.cs" />
     <Compile Include="Assets\Scripts\Biomes\Meadow.cs" />
     <Compile Include="Assets\Scripts\UI\Menu\MainMenuUI.cs" />
     <Compile Include="Assets\Scripts\PrefabInfo.cs" />

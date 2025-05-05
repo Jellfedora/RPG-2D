@@ -101,3 +101,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameIdentifier: Meadows_Tree1
+  prefabName: Tree1
+  isDestructible: 0
+  baseHealth: 90

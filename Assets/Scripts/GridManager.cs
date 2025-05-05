@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class GridManager : MonoBehaviour
 {
     [Header("Taille du monde")]
-    [SerializeField] private int chunkSize = 25;
+    [SerializeField] public int chunkSize = 25;
 
     [Header("Références")]
     [SerializeField] private Transform worldParent;

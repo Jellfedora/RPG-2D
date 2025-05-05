@@ -100,4 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd0a09f5038620541993c81d26ce30e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameIdentifier: Meadows_Tree2
+  gameIdentifier: Meadows_Tree3
+  prefabName: Tree3
+  isDestructible: 0
+  baseHealth: 75

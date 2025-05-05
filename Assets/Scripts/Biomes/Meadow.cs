@@ -52,6 +52,7 @@ public class MeadowBiome : Biome {
 
             // Assigner la position locale dans le chunk
             GameObject instance = Object.Instantiate(prefab, worldPos, Quaternion.identity, chunk.chunkTransform);
+
             TileData data = new TileData(pos, TileType.Ground) {
                 prefabName = prefabInfo.prefabName,
                 gameIdentifier = prefabInfo.gameIdentifier,

@@ -103,4 +103,4 @@ MonoBehaviour:
   gameIdentifier: Rock1
   prefabName: Rock1
   isDestructible: 1
-  baseHealth: 100
+  baseHealth: 80

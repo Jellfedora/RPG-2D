@@ -2743,7 +2743,7 @@ GameObject:
   - component: {fileID: 763030933}
   - component: {fileID: 763030932}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3724,10 +3724,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1892915854}
     m_Modifications:
+    - target: {fileID: 1364719220232783200, guid: e5127f29fdbabc4409a1c3f2f32e1329, type: 3}
+      propertyPath: m_fontSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1364719220232783200, guid: e5127f29fdbabc4409a1c3f2f32e1329, type: 3}
+      propertyPath: m_margin.z
+      value: -13.294312
+      objectReference: {fileID: 0}
+    - target: {fileID: 1364719220232783200, guid: e5127f29fdbabc4409a1c3f2f32e1329, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1459534201271643269, guid: e5127f29fdbabc4409a1c3f2f32e1329, type: 3}
       propertyPath: slider
       value: 
       objectReference: {fileID: 327291280}
+    - target: {fileID: 1459534201271643269, guid: e5127f29fdbabc4409a1c3f2f32e1329, type: 3}
+      propertyPath: minValue
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 1459534201271643269, guid: e5127f29fdbabc4409a1c3f2f32e1329, type: 3}
       propertyPath: currentValueText
       value: 
@@ -4332,17 +4348,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1336760982}
   m_CullTransparentMesh: 1
---- !u!114 &1359591597 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2163414228977286727, guid: e5127f29fdbabc4409a1c3f2f32e1329, type: 3}
-  m_PrefabInstance: {fileID: 1121274889}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1359591599 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8525837381891788199, guid: e5127f29fdbabc4409a1c3f2f32e1329, type: 3}
@@ -5595,7 +5600,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldNameInput: {fileID: 2111060785}
   worldSeedInput: {fileID: 1014310402}
-  worldSizeSlider: {fileID: 1359591597}
+  worldSizeSlider: {fileID: 327291280}
   generateButton: {fileID: 1125896477}
   backButton: {fileID: 1865905993}
 --- !u!1 &1999586492
