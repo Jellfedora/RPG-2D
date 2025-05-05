@@ -57,7 +57,7 @@ public class MeadowBiome : Biome {
                 prefabName = prefabInfo.prefabName,
                 gameIdentifier = prefabInfo.gameIdentifier,
                 isDestroyed = false,
-                currentHealth = prefabInfo.isDestructible ? prefabInfo.baseHealth : 100 // Si destructible, on met la santé de base
+                currentHealth = prefabInfo.isDestructible ? prefabInfo.baseHealth : 0 // Si destructible, on met la santé de base
             };
             chunk.tiles[pos] = data;
 

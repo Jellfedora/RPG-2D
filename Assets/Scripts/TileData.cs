@@ -12,7 +12,7 @@ public class TileData
     public string gameIdentifier;      // Identifiant unique en jeu (ex: meadow_tree_1)
 
     public bool isDestroyed = false;   // État de destruction
-    public int currentHealth = 100;    // État de santé (modifiable selon prefabInfo si nécessaire)
+    public int currentHealth = 0;    // État de santé (modifiable selon prefabInfo si nécessaire)
 
     // Constructeur principal
     public TileData(Vector2Int pos, TileType tileType)
