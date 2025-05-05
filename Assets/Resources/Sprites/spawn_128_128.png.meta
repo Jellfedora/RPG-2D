@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 10e61260aa52a3f41af0dee02b83a4ef
+guid: 21bfad644381bfd42b8018df3bed5cc5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3564697169241594822
-    second: iso_ground_64_64_0
+      213: 3064868119098189439
+    second: spawn_128_128_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 128
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -72,10 +72,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 128
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: iso_ground_64_64_0
+      name: spawn_128_128_0
       rect:
         serializedVersion: 2
         x: 16
-        y: 16
-        width: 32
-        height: 33
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        y: 24
+        width: 97
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a34a387afc6a78ec0800000000000000
-      internalID: -3564697169241594822
+      spriteID: f766442e059988a20800000000000000
+      internalID: 3064868119098189439
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: aafba6c7d2c2eac46bdcd60d0275723c
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -146,13 +146,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceOnImport
-        value: True
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":true,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      iso_ground_64_64_0: -3564697169241594822
+      spawn_128_128_0: 3064868119098189439
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

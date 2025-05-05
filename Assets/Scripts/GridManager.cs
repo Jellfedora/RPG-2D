@@ -5,7 +5,6 @@ public class GridManager : MonoBehaviour
 {
     [Header("Taille du monde")]
     [SerializeField] public int chunkSize = 25;
-
     [Header("Références")]
     [SerializeField] private Transform worldParent;
     private readonly Dictionary<Vector2Int, Chunk> chunks = new();
@@ -19,23 +18,46 @@ public class GridManager : MonoBehaviour
 
         Debug.Log($"[GridManager] Génération du monde {worldName} de taille {worldSize} avec la seed {worldSeed}");
 
-        int chunkCount = Mathf.CeilToInt((float)worldSize / chunkSize);
+        // Position du chunk central contenant le spawn
+        Vector2Int center = Vector2Int.zero;
 
-        // Génération des chunks
-        for (int cx = 0; cx < chunkCount; cx++)
-        {
-            for (int cy = 0; cy < chunkCount; cy++)
-            {
-                Vector2Int chunkPos = new(cx, cy);
-                if (!chunks.ContainsKey(chunkPos))
-                    GenerateChunk(chunkPos);
-            }
+        // On génére 24 chunks autour du spawn
+        Vector2Int[] offsets = new Vector2Int[] {
+            new(0, 0),
+            new(1, 0),
+            new(-1, 0),
+            new(0, 1),
+            new(0, -1),
+            new(1, 1),
+            new(1, -1),
+            new(-1, 1),
+            new(-1, -1),
+            new(2, 0),
+            new(-2, 0),
+            new(0, 2),
+            new(0, -2),
+            new(2, 1),
+            new(2, -1),
+            new(-2, 1),
+            new(-2, -1),
+            new(1, 2),
+            new(1, -2),
+            new(-1, 2),
+            new(-1, -2),
+            new(2, 2),
+            new(2, -2),
+            new(-2, 2),
+            new(-2, -2)
+        };
+
+        foreach (Vector2Int offset in offsets) {
+            Vector2Int chunkPos = center + offset;
+            GenerateChunk(chunkPos);
         }
     }
 
     // Génération d'un chunk en fonction de la position et de la seed
-    private void GenerateChunk(Vector2Int chunkPos)
-    {
+    private void GenerateChunk(Vector2Int chunkPos) {
         // Passer le seedRandom à chaque chunk
         Chunk chunk = new(chunkPos, chunkSize, worldParent, seedRandom);
         chunk.AssignBiome();
@@ -43,8 +65,7 @@ public class GridManager : MonoBehaviour
     }
 
     // Méthode pour obtenir un chunk à une position donnée
-    public Chunk GetChunkAtPosition(Vector2Int worldPos)
-    {
+    public Chunk GetChunkAtPosition(Vector2Int worldPos) {
         Vector2Int chunkPos = new(
             Mathf.FloorToInt(worldPos.x / (float)chunkSize),
             Mathf.FloorToInt(worldPos.y / (float)chunkSize)

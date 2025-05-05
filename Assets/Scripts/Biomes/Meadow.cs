@@ -26,8 +26,10 @@ public class MeadowBiome : Biome {
     }
 
     private Vector3 IsoPosition(int x, int y) {
-        float isoX = (x - y) * 0.5f;
-        float isoY = (x + y) * 0.25f;
+        // Pour des tuiles à l'échelle 1x1, les facteurs doivent être ajustés
+        // Sachant que les tuiles sont deux fois plus petites, on divise par 2 l'espacement
+        float isoX = (x - y) * 0.25f;
+        float isoY = (x + y) * 0.125f;
         return new Vector3(isoX, isoY, 0f);
     }
 
@@ -44,6 +46,7 @@ public class MeadowBiome : Biome {
             if (IsTooCloseToOtherObjects(pos, occupiedPositions, 1f)) continue;
 
             Vector3 worldPos = IsoPosition(x, y);
+            worldPos.y += 0.5f; // Ajustement Y pour alignement des bases
             GameObject prefab = GetRandomPrefab(objectPrefabs);
             if (prefab == null) continue;
 
@@ -121,7 +124,7 @@ public class MeadowBiome : Biome {
                 );
 
                 Vector3 isoPos = IsoPosition(worldPos.x, worldPos.y);
-                isoPos.y -= 0.75f; // Ajustement Y pour alignement des bases
+                isoPos.y -= 0.1875f; // Ajustement Y pour alignement des bases (0.75/4 pour la nouvelle échelle)
 
                 GameObject selectedPrefab = groundPrefabs[random.Next(groundPrefabs.Length)];
                 GameObject instance = Object.Instantiate(selectedPrefab, isoPos, Quaternion.identity, chunk.chunkTransform);
