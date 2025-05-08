@@ -2,7 +2,7 @@ namespace WorldGeneration
 {
     public enum TileType
     {
-        Ground,
+        Grass,
         Branching,
         Tree,
         Rock

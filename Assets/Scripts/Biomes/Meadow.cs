@@ -56,7 +56,7 @@ public class MeadowBiome : Biome {
             // Assigner la position locale dans le chunk
             GameObject instance = Object.Instantiate(prefab, worldPos, Quaternion.identity, chunk.chunkTransform);
 
-            TileData data = new TileData(pos, TileType.Ground) {
+            TileData data = new TileData(pos, TileType.Grass) {
                 prefabName = prefabInfo.prefabName,
                 gameIdentifier = prefabInfo.gameIdentifier,
                 isDestroyed = false,
@@ -98,17 +98,17 @@ public class MeadowBiome : Biome {
     }
 
     public override TileType GetTileTypeAt(Vector2Int worldPos) {
-        return TileType.Ground;
+        return TileType.Grass;
     }
 
     // Placement du sol
     public override void GenerateTileVisuals(Chunk chunk) {
         // Charger tous les types de sol
-        GameObject[] groundPrefabs = new GameObject[3];
+        GameObject[] grassPrefabs = new GameObject[3];
         for (int i = 0; i < 3; i++) {
-            groundPrefabs[i] = Resources.Load<GameObject>($"Prefabs/Ground/Ground{i + 1}");
-            if (groundPrefabs[i] == null) {
-                Debug.LogWarning($"Le prefab Ground{i + 1} est manquant !");
+            grassPrefabs[i] = Resources.Load<GameObject>($"Prefabs/Grass/Grass{i + 1}");
+            if (grassPrefabs[i] == null) {
+                Debug.LogWarning($"Le prefab Grass{i + 1} est manquant !");
                 return;
             }
         }
@@ -117,16 +117,16 @@ public class MeadowBiome : Biome {
             Vector2Int localPos = pair.Key;
             TileData tile = pair.Value;
 
-            if (tile.type == TileType.Ground) {
+            if (tile.type == TileType.Grass) {
                 Vector2Int worldPos = new(
                     chunk.chunkPosition.x * chunk.size + localPos.x,
                     chunk.chunkPosition.y * chunk.size + localPos.y
                 );
 
                 Vector3 isoPos = IsoPosition(worldPos.x, worldPos.y);
-                isoPos.y -= 0.1875f; // Ajustement Y pour alignement des bases (0.75/4 pour la nouvelle échelle)
+                //isoPos.y -= 0.1875f; // Ajustement Y pour alignement des bases (0.75/4 pour la nouvelle échelle)
 
-                GameObject selectedPrefab = groundPrefabs[random.Next(groundPrefabs.Length)];
+                GameObject selectedPrefab = grassPrefabs[random.Next(grassPrefabs.Length)];
                 GameObject instance = Object.Instantiate(selectedPrefab, isoPos, Quaternion.identity, chunk.chunkTransform);
 
                 SpriteRenderer sr = instance.GetComponent<SpriteRenderer>();
